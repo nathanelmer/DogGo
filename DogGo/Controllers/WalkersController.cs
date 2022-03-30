@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using DogGo.Repositories;
 using System.Collections.Generic;
 using DogGo.Models;
+using DogGo.Models.ViewModels;
 
 namespace DogGo.Controllers
 {
@@ -29,13 +30,20 @@ namespace DogGo.Controllers
         public ActionResult Details(int id)
         {
             Walker walker = _walkerRepo.GetWalkerById(id);
+            List<Walks> walks = _walkerRepo.GetWalksForWalker(walker.Id);
+
+            WalkerFormModel wm = new WalkerFormModel
+            {
+                Walker = walker,
+                Walks = walks
+            };
 
             if (walker == null)
             {
                 return NotFound();
             }
 
-            return View(walker);
+            return View(wm);
         }
 
         // GET: WalkersController/Create
